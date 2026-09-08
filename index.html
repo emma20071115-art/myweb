@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>個人 IP 展示 | 大學四年學習成果 Portfolio</title>
+    
+    <!-- Font Awesome 圖示庫 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS (從 CDN 引入以確保完美樣式呈現) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0f9ff',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            primary: '#6366f1', // Indigo
+                            secondary: '#a855f7', // Purple
+                            accent: '#06b6d4', // Cyan
+                            darkBg: '#0b0f19',
+                            cardBg: '#111827',
+                            cardBorder: '#1f2937'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Noto Sans TC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #f3f4f6;
+            font-family: 'Inter', 'Noto Sans TC', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* 漸變文字效果 */
+        .text-gradient {
+            background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #06b6d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* 微光光暈效果 */
+        .glow-effect {
+            position: relative;
+        }
+        .glow-effect::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #6366f1, #a855f7, #06b6d4);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            filter: blur(8px);
+        }
+        .glow-effect:hover::before {
+            opacity: 0.7;
+        }
+
+        /* 自訂滾動條 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0f19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1f2937;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #374151;
+        }
+
+        /* 玻璃擬態 */
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .glass-nav {
+            background: rgba(11, 15, 25, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* 卡片 Hover 懸浮效果 */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 時間軸線條脈衝動畫 */
+        @keyframes pulse-line {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+        .animate-pulse-line {
+            animation: pulse-line 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-200">
+
+    <nav class="fixed top-0 left-0 right-0 z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo / 品牌名 -->
+                <div class="flex-shrink-0 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-cyan-400 p-[2px] cursor-pointer">
+                        <div class="w-full h-full bg-gray-900 rounded-[10px] flex items-center justify-center font-bold text-lg text-white">
+                            IP
+                        </div>
+                    </div>
+                    <span class="font-bold text-lg tracking-wider text-white">YOUR NAME<span class="text-indigo-400">.</span></span>
+                </div>
+
+                <!-- 電腦版選單 -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8 text-sm font-medium">
+                        <a href="#about" class="text-gray-300 hover:text-indigo-400 transition-colors">關於我</a>
+                        <a href="#journey" class="text-gray-300 hover:text-indigo-400 transition-colors">大學歷程</a>
+                        <a href="#projects" class="text-gray-300 hover:text-indigo-400 transition-colors">精選作品</a>
+                        <a href="#skills" class="text-gray-300 hover:text-indigo-400 transition-colors">技能矩陣</a>
+                        <a href="#impact" class="text-gray-300 hover:text-indigo-400 transition-colors">成果統計</a>
+                        <a href="#contact" class="px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all shadow-lg shadow-indigo-600/30">聯絡我</a>
+                    </div>
+                </div>
+
+                <!-- 手機版選單按鈕 -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-300 hover:text-white p-2 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 手機版下拉選單 -->
+        <div id="mobile-menu" class="hidden md:hidden glass-panel border-b border-gray-800 px-4 pt-2 pb-6 space-y-3">
+            <a href="#about" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">關於我</a>
+            <a href="#journey" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">大學歷程</a>
+            <a href="#projects" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">精選作品</a>
+            <a href="#skills" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">技能矩陣</a>
+            <a href="#impact" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-gray-800">成果統計</a>
+            <a href="#contact" class="mobile-link block px-3 py-2 rounded-md text-base font-medium text-center bg-indigo-600 text-white">聯絡我</a>
+        </div>
+    </nav>
+
+    <header class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden">
+        <!-- 背景光脈沖裝飾 -->
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] pointer-events-none"></div>
+        <div class="absolute top-1/3 right-10 w-[300px] h-[300px] bg-purple-600/15 rounded-full blur-[100px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+                <!-- 左側文案 -->
+                <div class="flex-1 text-center md:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full glass-panel text-xs font-semibold text-indigo-400 mb-6 border border-indigo-500/20">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                        <span>尋求 2026/2027 職涯新機會 & 合作提案</span>
+                    </div>
+                    
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                        你好，我是 <span class="text-gradient">【您的名字】</span>
+                    </h1>
+                    
+                    <p class="text-xl sm:text-2xl font-medium text-gray-300 mb-4">
+                        跨領域學習者 | 前端開發 | 數位行銷企劃
+                    </p>
+                    
+                    <p class="text-gray-400 max-w-2xl text-base sm:text-lg mb-8 leading-relaxed">
+                        熱衷於將「技術邏輯」與「使用者體驗」完美結合。大學四年期間，從零建構多項 Web 專案、領導百人社團活動，並於競賽中獲得佳績。致力於創造具有真實影響力的數位產品。
+                    </p>
+
+                    <!-- CTA 按鈕區 -->
+                    <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
+                        <a href="#projects" class="px-7 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold shadow-lg shadow-indigo-500/25 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+                            <span>瀏覽精選作品</span>
+                            <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </a>
+                        <a href="#contact" class="px-7 py-3.5 rounded-xl glass-panel hover:bg-gray-800 text-gray-200 font-semibold transition-all border border-gray-700 flex items-center gap-2">
+                            <i class="fa-solid fa-file-arrow-down text-indigo-400"></i>
+                            <span>下載履歷簡報</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 右側大頭照與個人形象卡片 -->
+                <div class="relative">
+                    <div class="w-64 h-64 sm:w-80 sm:h-80 rounded-3xl p-1 bg-gradient-to-br from-indigo-500 via-purple-500 to-cyan-500 relative z-10 shadow-2xl">
+                        <div class="w-full h-full rounded-[22px] overflow-hidden bg-gray-900 relative">
+                            <!-- 請替換為您的個人大頭照圖片連結 -->
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800" 
+                                 alt="個人大頭照" 
+                                 class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500">
+                        </div>
+                    </div>
+                    <!-- 浮動卡片標籤裝飾 -->
+                    <div class="absolute -bottom-6 -left-6 glass-panel p-4 rounded-2xl z-20 border border-gray-700/80 shadow-xl hidden sm:flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-500/20 text-indigo-400 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs text-gray-400">畢業學府 / 科系</div>
+                            <div class="text-sm font-bold text-white">XX 大學 資訊管理學系</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="py-20 relative bg-slate-950/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">ABOUT ME</h2>
+                <p class="text-3xl font-extrabold text-white sm:text-4xl">個人定位與核心價值</p>
+                <div class="w-12 h-1 bg-indigo-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- 卡片 1 -->
+                <div class="glass-panel p-8 rounded-2xl card-hover relative overflow-hidden">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">技術實踐者</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        擅長 Web 前端開發（HTML/CSS/JS/React），注重程式碼維護性與響應式使用者體驗（UX），喜歡將創新想法轉化為實體網頁產品。
+                    </p>
+                </div>
+
+                <!-- 卡片 2 -->
+                <div class="glass-panel p-8 rounded-2xl card-hover relative overflow-hidden">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">跨領域思維</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        具備資訊技術與數位行銷雙重視野，能站在使用者角度分析需求，同時兼具專案執行力與商業邏輯痛點拆解能力。
+                    </p>
+                </div>
+
+                <!-- 卡片 3 -->
+                <div class="glass-panel p-8 rounded-2xl card-hover relative overflow-hidden">
+                    <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl mb-6">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-3">團隊溝通者</h3>
+                    <p class="text-gray-400 leading-relaxed text-sm">
+                        豐富的社團領導與專案組長經驗，善於協調團隊成員溝通、時程控管，並在高壓競賽環境下維持團隊高效輸出。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="journey" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">JOURNEY</h2>
+                <p class="text-3xl font-extrabold text-white sm:text-4xl">大學四年歷程軌跡</p>
+                <p class="text-gray-400 mt-2">點擊下方年份頁籤，查看各階段的重點學習與成果</p>
+            </div>
+
+            <!-- 時間軸年份切換按鈕 -->
+            <div class="flex justify-center gap-2 sm:gap-4 mb-12 flex-wrap">
+                <button onclick="switchYear('y1')" id="btn-y1" class="year-btn active px-5 py-2.5 rounded-xl font-semibold text-sm transition-all bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">
+                    大一：基礎探索
+                </button>
+                <button onclick="switchYear('y2')" id="btn-y2" class="year-btn px-5 py-2.5 rounded-xl font-semibold text-sm transition-all glass-panel text-gray-400 hover:text-white">
+                    大二：專業深耕
+                </button>
+                <button onclick="switchYear('y3')" id="btn-y3" class="year-btn px-5 py-2.5 rounded-xl font-semibold text-sm transition-all glass-panel text-gray-400 hover:text-white">
+                    大三：實務競賽
+                </button>
+                <button onclick="switchYear('y4')" id="btn-y4" class="year-btn px-5 py-2.5 rounded-xl font-semibold text-sm transition-all glass-panel text-gray-400 hover:text-white">
+                    大四：畢設與整合
+                </button>
+            </div>
+
+            <!-- 年份內容顯示區 -->
+            <div class="max-w-4xl mx-auto">
+                <!-- 大一內容 -->
+                <div id="content-y1" class="year-content glass-panel p-8 rounded-2xl border border-gray-800 transition-all duration-300">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="px-3 py-1 rounded-md bg-indigo-500/20 text-indigo-400 font-bold text-sm">2022 - 2023</span>
+                        <h3 class="text-2xl font-bold text-white">大一階段｜專業啟蒙與探索</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-indigo-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">修習基礎核心課程：</strong>程式設計入門 (C++/Python)、計算機概論，奠定良好的邏輯思維與演算法基礎。
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-indigo-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">社團與課外活動：</strong>加入系學會活動部，擔任迎新活動總召，培養團隊溝通、活動規劃與預算控管能力。
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-indigo-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">自主學習：</strong>完成網頁設計基礎 (HTML/CSS/JS) 線上課程，並製作第一個個人靜態網頁。
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 大二內容 (預設隱藏) -->
+                <div id="content-y2" class="year-content hidden glass-panel p-8 rounded-2xl border border-gray-800 transition-all duration-300">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="px-3 py-1 rounded-md bg-purple-500/20 text-purple-400 font-bold text-sm">2023 - 2024</span>
+                        <h3 class="text-2xl font-bold text-white">大二階段｜專案實作與技術深耕</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-purple-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">進階核心專業：</strong>資料結構、資料庫系統管理 (SQL)、網頁程式設計。
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-purple-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">全端專案實作：</strong>與同學組隊開發「校園二手書交易平台」，負責前端介面設計與 API 串接。
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-purple-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">幹部經驗：</strong>擔任系學會資訊長，維護系所官網並舉辦全系技術工作坊。
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 大三內容 (預設隱藏) -->
+                <div id="content-y3" class="year-content hidden glass-panel p-8 rounded-2xl border border-gray-800 transition-all duration-300">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="px-3 py-1 rounded-md bg-cyan-500/20 text-cyan-400 font-bold text-sm">2024 - 2025</span>
+                        <h3 class="text-2xl font-bold text-white">大三階段｜跨領域競賽與實習體驗</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-cyan-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">企業實習經驗：</strong>錄取 XX 科技公司「前端開發實習生」，參與真實產品模組優化與 UI 重構。
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-cyan-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">商業競賽獲獎：</strong>參加「全國大專院校數位創新競賽」，提出智慧零售方案，榮獲全國前三名佳績。
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-cyan-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">畢業專題立項：</strong>與指導教授確定專題方向，投入 AI 結合 Web 的整合應用開發。
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 大四內容 (預設隱藏) -->
+                <div id="content-y4" class="year-content hidden glass-panel p-8 rounded-2xl border border-gray-800 transition-all duration-300">
+                    <div class="flex items-center gap-4 mb-6">
+                        <span class="px-3 py-1 rounded-md bg-emerald-500/20 text-emerald-400 font-bold text-sm">2025 - 2026</span>
+                        <h3 class="text-2xl font-bold text-white">大四階段｜畢業成果整合與個人 IP 打造</h3>
+                    </div>
+                    <ul class="space-y-4 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">畢業專題發表：</strong>完成「AI 智慧學習助手系統」，公開展示並順利通過專題評審獲得優等獎。
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">打造個人品牌：</strong>產出多篇技術學習筆記發布於 Medium，並建置此個人成果 showcase 網站。
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i class="fa-solid fa-circle-check text-emerald-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white">準備職涯銜接：</strong>完成履歷作品集整理，積極投遞前端與產品企劃相關職缺。
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="projects" class="py-20 bg-slate-950/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">PROJECTS</h2>
+                <p class="text-3xl font-extrabold text-white sm:text-4xl">精選作品與學習成果</p>
+                <p class="text-gray-400 mt-2">涵蓋程式開發、社團專案、競賽與實習紀錄</p>
+            </div>
+
+            <!-- 分類篩選按鈕 -->
+            <div class="flex justify-center gap-2 sm:gap-3 mb-10 flex-wrap">
+                <button onclick="filterProjects('all')" class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all bg-indigo-600 text-white">全部</button>
+                <button onclick="filterProjects('dev')" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition-all glass-panel text-gray-400 hover:text-white">程式專案</button>
+                <button onclick="filterProjects('contest')" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition-all glass-panel text-gray-400 hover:text-white">競賽獲獎</button>
+                <button onclick="filterProjects('activity')" class="filter-btn px-4 py-2 rounded-lg text-sm font-medium transition-all glass-panel text-gray-400 hover:text-white">社團與活動</button>
+            </div>
+
+            <!-- 作品卡片列表 (Grid 佈局) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 作品 1 (程式專案) -->
+                <div class="project-card dev glass-panel rounded-2xl overflow-hidden card-hover flex flex-col">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" alt="專案圖片" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                        <span class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-indigo-600/90 text-white">畢業專題</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">AI 智慧學習助手 App</h3>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">
+                                結合 ChatGPT API 與前端互動，幫助學生自動生成複習筆記與隨堂小測驗的智能系統。
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2 py-1 text-xs rounded bg-gray-800 text-indigo-300">Vue.js</span>
+                                <span class="px-2 py-1 text-xs rounded bg-gray-800 text-indigo-300">Tailwind CSS</span>
+                                <span class="px-2 py-1 text-xs rounded bg-gray-800 text-indigo-300">OpenAI API</span>
+                            </div>
+                        </div>
+                        <button onclick="openModal('modal-1')" class="w-full py-2.5 rounded-xl bg-gray-800 hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 border border-gray-700 hover:border-indigo-500/50 text-sm font-semibold transition-all">
+                            查看詳情 Modal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 作品 2 (競賽獲獎) -->
+                <div class="project-card contest glass-panel rounded-2xl overflow-hidden card-hover flex flex-col">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800" alt="專案圖片" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                        <span class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-amber-600/90 text-white">競賽亞軍</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">智慧零售導覽商業提案</h3>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">
+                                為實體零售業者規劃之 AR 導覽與行為數據分析系統，於全國大專商業創新賽榮獲第二名。
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2 py-1 text-xs rounded bg-gray-800 text-amber-300">商業模式企劃</span>
+                                <span class="px-2 py-1 text-xs rounded bg-gray-800 text-amber-300">原型設計</span>
+                            </div>
+                        </div>
+                        <button onclick="openModal('modal-2')" class="w-full py-2.5 rounded-xl bg-gray-800 hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 border border-gray-700 hover:border-indigo-500/50 text-sm font-semibold transition-all">
+                            查看詳情 Modal
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 作品 3 (社團與活動) -->
+                <div class="project-card activity glass-panel rounded-2xl overflow-hidden card-hover flex flex-col">
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=800" alt="專案圖片" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                        <span class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-600/90 text-white">社團幹部</span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-xl font-bold text-white mb-2">資訊年會與黑客松籌辦</h3>
+                            <p class="text-gray-400 text-sm mb-4 line-clamp-2">
+                                擔任總召集人，規劃並執行跨校 200 人規模之黑客松競賽，獲得贊助廠商高度認同。
+                            </p>
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-2 py-1 text-xs rounded bg-gray-800 text-emerald-300">活動領導</span>
+                                <span class="px-2 py-1 text-xs rounded bg-gray-800 text-emerald-300">廠商贊助</span>
+                            </div>
+                        </div>
+                        <button onclick="openModal('modal-3')" class="w-full py-2.5 rounded-xl bg-gray-800 hover:bg-indigo-600/20 text-indigo-400 hover:text-indigo-300 border border-gray-700 hover:border-indigo-500/50 text-sm font-semibold transition-all">
+                            查看詳情 Modal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">SKILLS & TOOLS</h2>
+                <p class="text-3xl font-extrabold text-white sm:text-4xl">專業技能矩陣</p>
+                <div class="w-12 h-1 bg-indigo-500 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- 專業硬實力 -->
+                <div class="glass-panel p-8 rounded-2xl border border-gray-800">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-laptop-code text-indigo-400"></i>
+                        <span>程式開發與技術 (Technical Skills)</span>
+                    </h3>
+                    <div class="space-y-6">
+                        <!-- 技能進度條 1 -->
+                        <div>
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-200 font-medium">HTML5 / CSS3 / Tailwind CSS</span>
+                                <span class="text-indigo-400 font-bold">90%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <!-- 技能進度條 2 -->
+                        <div>
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-200 font-medium">JavaScript (ES6+) / Vue.js</span>
+                                <span class="text-indigo-400 font-bold">80%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <!-- 技能進度條 3 -->
+                        <div>
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-200 font-medium">Git / GitHub 版本控制</span>
+                                <span class="text-indigo-400 font-bold">85%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-indigo-500 to-purple-500 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 設計與軟實力 -->
+                <div class="glass-panel p-8 rounded-2xl border border-gray-800">
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-compass-drafting text-purple-400"></i>
+                        <span>設計與專案管理 (Design & Soft Skills)</span>
+                    </h3>
+                    <div class="space-y-6">
+                        <!-- 技能進度條 1 -->
+                        <div>
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-200 font-medium">UI/UX 設計 (Figma)</span>
+                                <span class="text-purple-400 font-bold">75%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <!-- 技能進度條 2 -->
+                        <div>
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-200 font-medium">專案管理與敏捷溝通</span>
+                                <span class="text-purple-400 font-bold">88%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <!-- 技能進度條 3 -->
+                        <div>
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-200 font-medium">簡報表達與成果提案</span>
+                                <span class="text-purple-400 font-bold">92%</span>
+                            </div>
+                            <div class="w-full h-2.5 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="impact" class="py-16 bg-gradient-to-r from-indigo-900/30 via-purple-900/20 to-slate-950 border-y border-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <!-- 數字 1 -->
+                <div class="p-4">
+                    <div class="text-4xl sm:text-5xl font-black text-gradient counter" data-target="15">0</div>
+                    <div class="text-gray-400 text-sm font-medium mt-2">完成專案與作品</div>
+                </div>
+                <!-- 數字 2 -->
+                <div class="p-4">
+                    <div class="text-4xl sm:text-5xl font-black text-gradient counter" data-target="3">0</div>
+                    <div class="text-gray-400 text-sm font-medium mt-2">全國性競賽獲獎</div>
+                </div>
+                <!-- 數字 3 -->
+                <div class="p-4">
+                    <div class="text-4xl sm:text-5xl font-black text-gradient counter" data-target="500">0</div>
+                    <div class="text-gray-400 text-sm font-medium mt-2">社團活動參與人數</div>
+                </div>
+                <!-- 數字 4 -->
+                <div class="p-4">
+                    <div class="text-4xl sm:text-5xl font-black text-gradient counter" data-target="800">0</div>
+                    <div class="text-gray-400 text-sm font-medium mt-2">企業實習總時數</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-20 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <!-- 左側：聯絡資訊與社群按鈕 -->
+                <div>
+                    <h2 class="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">GET IN TOUCH</h2>
+                    <p class="text-3xl font-extrabold text-white sm:text-4xl mb-6">讓我們建立連結！</p>
+                    <p class="text-gray-400 mb-8 leading-relaxed">
+                        如果您對我的學習成果、作品感興趣，或有實習、正職合作機會，歡迎隨時透過 Email 或社群平台與我聯繫。
+                    </p>
+
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center gap-4 text-gray-300">
+                            <div class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-indigo-400">
+                                <i class="fa-solid fa-envelope"></i>
+                            </div>
+                            <span>your.email@example.com</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-gray-300">
+                            <div class="w-10 h-10 rounded-lg glass-panel flex items-center justify-center text-indigo-400">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+                            <span>台灣，台北市 / 苗栗縣</span>
+                        </div>
+                    </div>
+
+                    <!-- 社群 Icon 列表 -->
+                    <div class="flex items-center gap-4">
+                        <a href="https://github.com" target="_blank" class="w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-gray-300 hover:text-white hover:bg-indigo-600 transition-all text-xl">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" class="w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-gray-300 hover:text-white hover:bg-indigo-600 transition-all text-xl">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                        <a href="https://medium.com" target="_blank" class="w-12 h-12 rounded-xl glass-panel flex items-center justify-center text-gray-300 hover:text-white hover:bg-indigo-600 transition-all text-xl">
+                            <i class="fa-brands fa-medium"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 右側：互動式聯絡表單 -->
+                <div class="glass-panel p-8 rounded-2xl border border-gray-800">
+                    <form id="contact-form" onsubmit="handleFormSubmit(event)" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">您的姓名</label>
+                            <input type="text" required placeholder="例如：王小明" class="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white focus:outline-none focus:border-indigo-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">您的 Email</label>
+                            <input type="email" required placeholder="example@gmail.com" class="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white focus:outline-none focus:border-indigo-500 transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">訊息內容</label>
+                            <textarea rows="4" required placeholder="寫下想跟我說的話或合作提案..." class="w-full px-4 py-3 rounded-xl bg-gray-900 border border-gray-700 text-white focus:outline-none focus:border-indigo-500 transition-colors"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold shadow-lg shadow-indigo-600/30 transition-all">
+                            發送訊息
+                        </button>
+                    </form>
+                    <div id="form-message" class="hidden mt-4 p-3 rounded-xl bg-emerald-500/20 text-emerald-300 text-center text-sm">
+                        感謝您的來信！我會儘快回覆您。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="modal-1" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="glass-panel max-w-2xl w-full rounded-2xl p-6 sm:p-8 relative border border-gray-700 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-1')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-white mb-4">AI 智慧學習助手 App (畢業專題)</h3>
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=800" alt="專案大圖" class="w-full h-56 object-cover rounded-xl mb-6">
+            <p class="text-gray-300 mb-4 leading-relaxed">
+                這是我的畢業專題作品。系統解決了學生在課後複習時找不到重點與缺乏自主練習的痛點。
+            </p>
+            <h4 class="font-bold text-white mb-2">專案亮點：</h4>
+            <ul class="list-disc list-inside text-gray-400 space-y-1 mb-6 text-sm">
+                <li>整合 OpenAI API，實作重點自動摘要演算法</li>
+                <li>採用 Responsive 響應式 UI，完美支援手機與平板體驗</li>
+                <li>獲得校內畢業專題競賽「優等獎」</li>
+            </ul>
+            <div class="flex gap-4">
+                <a href="#" target="_blank" class="px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-medium text-sm hover:bg-indigo-500 transition-all">線上 Demo</a>
+                <a href="#" target="_blank" class="px-5 py-2.5 rounded-lg glass-panel text-gray-300 font-medium text-sm hover:bg-gray-800 transition-all">GitHub Code</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal 彈窗內容 2 -->
+    <div id="modal-2" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="glass-panel max-w-2xl w-full rounded-2xl p-6 sm:p-8 relative border border-gray-700 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-2')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-white mb-4">智慧零售導覽商業提案</h3>
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=800" alt="專案大圖" class="w-full h-56 object-cover rounded-xl mb-6">
+            <p class="text-gray-300 mb-4 leading-relaxed">
+                針對線下實體門市人流與導購痛點，團隊提出了以 AR 視覺與數據分析為核心的解決方案。
+            </p>
+            <h4 class="font-bold text-white mb-2">我的貢獻：</h4>
+            <ul class="list-disc list-inside text-gray-400 space-y-1 mb-6 text-sm">
+                <li>負責 Figma 高保真 UI 原型繪製與用戶流程測試</li>
+                <li>撰寫商業模式競賽簡報並進行決賽 Pitch</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Modal 彈窗內容 3 -->
+    <div id="modal-3" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+        <div class="glass-panel max-w-2xl w-full rounded-2xl p-6 sm:p-8 relative border border-gray-700 max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('modal-3')" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h3 class="text-2xl font-bold text-white mb-4">資訊年會與黑客松籌辦</h3>
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=800" alt="專案大圖" class="w-full h-56 object-cover rounded-xl mb-6">
+            <p class="text-gray-300 mb-4 leading-relaxed">
+                帶領 15 人學生團隊，成功籌辦吸引 200 位跨校學員參加的技術黑客松活動。
+            </p>
+        </div>
+    </div>
+
+    <footer class="py-8 border-t border-gray-800 text-center text-gray-500 text-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <p>© 2026 Your Name. All rights reserved. Designed for GitHub Pages Showcase.</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. 手機版選單切換邏輯
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // 2. 大學歷程年份切換邏輯
+        function switchYear(yearId) {
+            // 隱藏所有內容
+            document.querySelectorAll('.year-content').forEach(el => {
+                el.classList.add('hidden');
+            });
+            // 移除所有按鈕 active 樣式
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+                btn.classList.add('glass-panel', 'text-gray-400');
+            });
+
+            // 顯示目標內容與設定按鈕 active
+            document.getElementById(`content-${yearId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`btn-${yearId}`);
+            activeBtn.classList.remove('glass-panel', 'text-gray-400');
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+        }
+
+        // 3. 作品分類篩選邏輯
+        function filterProjects(category) {
+            const cards = document.querySelectorAll('.project-card');
+            const buttons = document.querySelectorAll('.filter-btn');
+
+            // 按鈕樣式切換
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white');
+                btn.classList.add('glass-panel', 'text-gray-400');
+            });
+            event.target.classList.remove('glass-panel', 'text-gray-400');
+            event.target.classList.add('bg-indigo-600', 'text-white');
+
+            // 卡片顯示/隱藏
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // 4. Modal 彈窗控制邏輯
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // 5. 聯絡表單發送預覽
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const msg = document.getElementById('form-message');
+            msg.classList.remove('hidden');
+            document.getElementById('contact-form').reset();
+            setTimeout(() => {
+                msg.classList.add('hidden');
+            }, 4000);
+        }
+
+        // 6. 數字計數器滾動動畫
+        let animated = false;
+        window.addEventListener('scroll', () => {
+            const impactSection = document.getElementById('impact');
+            if (!impactSection) return;
+            const sectionPos = impactSection.getBoundingClientRect().top;
+            const screenPos = window.innerHeight / 1.3;
+
+            if (sectionPos < screenPos && !animated) {
+                animated = true;
+                const counters = document.querySelectorAll('.counter');
+                counters.forEach(counter => {
+                    const target = +counter.getAttribute('data-target');
+                    let count = 0;
+                    const speed = target / 30; // 速度控制
+
+                    const updateCount = () => {
+                        count += speed;
+                        if (count < target) {
+                            counter.innerText = Math.ceil(count) + '+';
+                            setTimeout(updateCount, 40);
+                        } else {
+                            counter.innerText = target + '+';
+                        }
+                    };
+                    updateCount();
+                });
+            }
+        });
+    </script>
+</body>
+</html>
