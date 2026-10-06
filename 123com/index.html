@@ -1,0 +1,1088 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSHI PORT | 推活周邊收納與展示選物店</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- 全局 CSS 變數 --- */
+        :root {
+            --primary: #9d81b7;
+            --primary-light: #f3eef8;
+            --primary-dark: #6f518c;
+            --accent-pink: #f2d6e3;
+            --bg-main: #faf9fb;
+            --card-bg: #ffffff;
+            --text-dark: #2d2a32;
+            --text-muted: #837d8d;
+            --border-light: #eae5ef;
+            --shadow-soft: 0 8px 24px rgba(157, 129, 183, 0.08);
+            --shadow-hover: 0 12px 30px rgba(157, 129, 183, 0.18);
+            --radius-lg: 16px;
+            --radius-md: 10px;
+            --radius-sm: 6px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* --- 重置與基礎設置 --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', 'Poppins', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            outline: none;
+            font-family: inherit;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ---STREAMING_CHUNK:Styling Navigation Bar... --- */
+        .navbar {
+            position: sticky;
+            top: 0;
+            background-color: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            border-bottom: 1px solid var(--border-light);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            color: var(--primary-dark);
+        }
+
+        .logo-tag {
+            font-size: 0.75rem;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .search-bar {
+            position: relative;
+            width: 320px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 9px 16px 9px 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            background-color: var(--bg-main);
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            border-color: var(--primary);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(157, 129, 183, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .cart-icon-btn {
+            position: relative;
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .cart-icon-btn:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background-color: #e85d75;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #fff;
+        }
+
+        /* --- STREAMING_CHUNK:Styling Hero Banner... --- */
+        .hero-banner {
+            background: linear-gradient(135deg, #f7f3fa 0%, #fbeff5 100%);
+            padding: 60px 0;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .hero-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .hero-content {
+            max-width: 580px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: var(--primary-dark);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-light);
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.3;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 28px;
+        }
+
+        .hero-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-weight: 500;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(157, 129, 183, 0.3);
+        }
+
+        .hero-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* --- STREAMING_CHUNK:Styling Category Filters & Section... --- */
+        .filter-section {
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            position: relative;
+            padding-left: 14px;
+        }
+
+        .section-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 15%;
+            height: 70%;
+            width: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 8px 20px;
+            border-radius: 20px;
+            background-color: #fff;
+            border: 1px solid var(--border-light);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            background-color: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(157, 129, 183, 0.2);
+        }
+
+        /* --- STREAMING_CHUNK:Styling Product Cards Grid... --- */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 28px;
+            margin-bottom: 80px;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-img-box {
+            position: relative;
+            width: 100%;
+            padding-top: 75%; /* 4:3 比例 */
+            background-color: #f7f7f9;
+            overflow: hidden;
+        }
+
+        .product-img-box img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-img-box img {
+            transform: scale(1.05);
+        }
+
+        .quick-view-btn {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--primary-dark);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .product-card:hover .quick-view-btn {
+            bottom: 12px;
+        }
+
+        .product-info {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-tag {
+            align-self: flex-start;
+            font-size: 0.72rem;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+
+        .product-jp-title {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+
+        .product-footer {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border-light);
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+
+        .add-cart-btn {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .add-cart-btn:hover {
+            background-color: var(--primary);
+            color: #fff;
+        }
+
+        /* --- STREAMING_CHUNK:Styling Cart Drawer & Modal... --- */
+        /* 側邊欄 Drawer */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            z-index: 200;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .drawer-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -420px;
+            width: 420px;
+            max-width: 100%;
+            height: 100%;
+            background-color: #fff;
+            z-index: 201;
+            box-shadow: -5px 0 25px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            transition: var(--transition);
+        }
+
+        .cart-drawer.active {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .drawer-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+
+        .close-btn {
+            background: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .close-btn:hover {
+            color: var(--text-dark);
+        }
+
+        .cart-items-body {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .cart-item-img {
+            width: 70px;
+            height: 70px;
+            border-radius: var(--radius-md);
+            object-fit: cover;
+            background-color: #f5f5f5;
+        }
+
+        .cart-item-details {
+            flex-grow: 1;
+        }
+
+        .cart-item-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .cart-item-price {
+            font-size: 0.9rem;
+            color: var(--primary-dark);
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .cart-item-control {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .qty-picker {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-light);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            font-size: 0.9rem;
+        }
+
+        .qty-num {
+            padding: 0 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .remove-item-btn {
+            color: #d9534f;
+            font-size: 0.8rem;
+            text-decoration: underline;
+        }
+
+        .cart-footer {
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-light);
+            background-color: var(--bg-main);
+        }
+
+        .cart-total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            padding: 14px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .checkout-btn:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* 詳細資訊 Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-card {
+            background-color: #fff;
+            width: 760px;
+            max-width: 100%;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            display: flex;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .modal-img-col {
+            width: 45%;
+            background-color: #f7f7f9;
+        }
+
+        .modal-img-col img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-info-col {
+            width: 55%;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: #fff;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .modal-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .modal-jp {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+
+        .modal-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+        }
+
+        .modal-desc {
+            font-size: 0.92rem;
+            color: var(--text-dark);
+            line-height: 1.7;
+            margin-bottom: 24px;
+        }
+
+        /* --- STREAMING_CHUNK:Styling Footer... --- */
+        .footer {
+            background-color: #fff;
+            border-top: 1px solid var(--border-light);
+            padding: 40px 0 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        /* 響應式微調 */
+        @media (max-width: 768px) {
+            .search-bar { display: none; }
+            .hero-wrapper { flex-direction: column; text-align: center; }
+            .hero-title { font-size: 1.8rem; }
+            .modal-card { flex-direction: column; max-height: 90vh; overflow-y: auto; }
+            .modal-img-col, .modal-info-col { width: 100%; }
+            .modal-img-col { height: 240px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <span class="logo-title">OSHI PORT</span>
+                <span class="logo-tag">推活選物</span>
+            </a>
+
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="搜尋周邊保護套、痛包、展示盒...">
+            </div>
+
+            <div class="nav-actions">
+                <button class="cart-icon-btn" id="openCartBtn" aria-label="購物車">
+                    🛒
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-banner">
+        <div class="container hero-wrapper">
+            <div class="hero-content">
+                <span class="hero-badge">✨ 2026 夏季推活新品展</span>
+                <h1 class="hero-title">給珍藏的寶物<br>最完美溫柔的保護與展示</h1>
+                <p class="hero-desc">專為動漫、偶像粉絲打造的高質感收納配件。痛包、吧唧套、立牌保護包一應俱全，優雅帶著推出門！</p>
+                <a href="#productList" class="hero-btn">瀏覽所有周邊 ➔</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container" id="productList">
+        <div class="filter-section">
+            <h2 class="section-title">熱門配件選品</h2>
+            <div class="category-tabs">
+                <button class="tab-btn active" data-category="all">全部分類</button>
+                <button class="tab-btn" data-category="cover">保護套類</button>
+                <button class="tab-btn" data-category="bag">包款收納</button>
+                <button class="tab-btn" data-category="display">展示與收藏冊</button>
+            </div>
+        </div>
+
+        <!-- 商品網格 (由 JS 動態呈現或寫死靜態樣式) -->
+        <div class="product-grid" id="productGrid"></div>
+    </main>
+
+    <!-- 購物車 Drawer -->
+    <div class="drawer-overlay" id="drawerOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer">
+        <div class="drawer-header">
+            <span class="drawer-title">購物清單</span>
+            <button class="close-btn" id="closeCartBtn">&times;</button>
+        </div>
+        <div class="cart-items-body" id="cartItemsContainer">
+            <!-- 購物車項目區域 -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total-row">
+                <span>小計金額</span>
+                <span id="cartTotalPrice">NT$ 0</span>
+            </div>
+            <button class="checkout-btn" onclick="alert('感謝您的訂購！')">前往結帳</button>
+        </div>
+    </aside>
+
+    <!-- 商品詳情 Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-card">
+            <button class="modal-close" id="closeModalBtn">&times;</button>
+            <div class="modal-img-col">
+                <img id="modalImg" src="" alt="商品大圖">
+            </div>
+            <div class="modal-info-col">
+                <h3 class="modal-title" id="modalTitle"></h3>
+                <div class="modal-jp" id="modalJp"></div>
+                <div class="modal-price" id="modalPrice"></div>
+                <p class="modal-desc" id="modalDesc"></p>
+                <button class="hero-btn" id="modalAddCartBtn" style="width: 100%; justify-content: center;">加入購物車</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 OSHI PORT. All Rights Reserved. 推活選物專門店</p>
+        </div>
+    </footer>
+
+    <script>
+        // 1. 商品資料定義 (對應 01.jpg - 10.jpg)
+        const products = [
+            {
+                id: "01",
+                name: "痛包",
+                jpName: "痛バッグ / Itabag",
+                category: "bag",
+                price: 880,
+                tag: "外出必備",
+                img: "images/01.jpg",
+                desc: "專為展示徽章、公仔與吊飾設計的經典包款。透明正面防塵防水，內部附有扎布與多重扣環，方便自由排版佈置愛角周邊。"
+            },
+            {
+                id: "02",
+                name: "徽章保護套",
+                jpName: "缶バッジカバー / Badge Cover",
+                category: "cover",
+                price: 120,
+                tag: "熱銷防護",
+                img: "images/02.jpg",
+                desc: "採用高透明度 PVC 材質，貼合包覆圓形金屬徽章。有效防塵、防水、抗氧化，避免金屬磨損或表面刮傷。"
+            },
+            {
+                id: "03",
+                name: "硬卡套 / 裝飾卡套",
+                jpName: "トップローダー / Card Loader",
+                category: "cover",
+                price: 150,
+                tag: "小卡防折",
+                img: "images/03.jpg",
+                desc: "硬質壓克力防折卡套，邊框帶有精美蕾絲與蕾絲流沙印刷，保護小卡與拍立得不折損的同時大大提升高顏值。"
+            },
+            {
+                id: "04",
+                name: "娃包 / 棉花娃外出包",
+                jpName: "ぬいバッグ / Plush Pouch",
+                category: "bag",
+                price: 280,
+                tag: "帶娃出門",
+                img: "images/04.jpg",
+                desc: "專為 10cm-20cm 棉花娃與指偶打造的立體透明防塵包。附金屬扣環，可輕鬆掛在日常隨身包包上帶娃娃一起出遊。"
+            },
+            {
+                id: "05",
+                name: "壓克力立牌保護套 / 收納包",
+                jpName: "アクリルスタンドケース",
+                category: "bag",
+                price: 220,
+                tag: "雙層防刮",
+                img: "images/05.jpg",
+                desc: "扁平攜帶型防護包，內置前後雙層分隔，將壓克力立牌本體與底座分開存放，有效避免攜帶過程中的相互摩擦刮傷。"
+            },
+            {
+                id: "06",
+                name: "色紙保護套",
+                jpName: "色紙カバー / Shikishi Sleeve",
+                category: "cover",
+                price: 99,
+                tag: "高透防潮",
+                img: "images/06.jpg",
+                desc: "標準尺寸色紙專用高透明度保護套，防塵防受潮，完美貼合四角，讓珍貴的簽名板與特典色紙保持全新狀態。"
+            },
+            {
+                id: "07",
+                name: "壓克力展示盒 / 搖搖樂展示框",
+                jpName: "アクリルフレーム / Acrylic Frame",
+                category: "display",
+                price: 350,
+                tag: "桌上擺飾",
+                img: "images/07.jpg",
+                desc: "多層壓克力結構，帶有精美印刷與流沙閃粉裝飾。將相卡或小卡夾於其中，能瞬間升級為高級桌上藝術展品。"
+            },
+            {
+                id: "08",
+                name: "手燈包 / 應援棒收納袋",
+                jpName: "ペンライトケース",
+                category: "bag",
+                price: 420,
+                tag: "Live 必備",
+                img: "images/08.jpg",
+                desc: "加厚海綿防震設計手燈收納包，內有彈性固定帶與備用電池網袋，確保現場應援手燈在運輸途中得到完整保護。"
+            },
+            {
+                id: "09",
+                name: "娃衣與周邊配件",
+                jpName: "ぬいぐるみ服 / Plush Clothes",
+                category: "display",
+                price: 320,
+                tag: "換裝造型",
+                img: "images/09.jpg",
+                desc: "適合 15cm-20cm 娃娃的迷你精緻套裝，含有動物斗篷與日系學生服等樣式，為您的愛娃打造獨一無二的萌趣造型。"
+            },
+            {
+                id: "10",
+                name: "周邊收藏冊 / 存檔 Binder",
+                jpName: "グッズ収納ファイル",
+                category: "display",
+                price: 290,
+                tag: "系統歸類",
+                img: "images/10.jpg",
+                desc: "多功能活頁夾收藏冊，可自由組合小卡格、徽章格與色紙頁，將數量龐大的周邊整齊存檔，隨時翻閱充滿成就感。"
+            }
+        ];
+
+        // 購物車狀態
+        let cart = [];
+
+        // DOM 元素
+        const productGrid = document.getElementById('productGrid');
+        const cartDrawer = document.getElementById('cartDrawer');
+        const drawerOverlay = document.getElementById('drawerOverlay');
+        const openCartBtn = document.getElementById('openCartBtn');
+        const closeCartBtn = document.getElementById('closeCartBtn');
+        const cartBadge = document.getElementById('cartBadge');
+        const cartItemsContainer = document.getElementById('cartItemsContainer');
+        const cartTotalPrice = document.getElementById('cartTotalPrice');
+
+        // Modal 元素
+        const productModal = document.getElementById('productModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modalImg = document.getElementById('modalImg');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalJp = document.getElementById('modalJp');
+        const modalPrice = document.getElementById('modalPrice');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalAddCartBtn = document.getElementById('modalAddCartBtn');
+
+        // 2. STREAMING_CHUNK:Rendering Product Cards to UI...
+        function renderProducts(items) {
+            productGrid.innerHTML = '';
+            items.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-img-box" onclick="openModal('${p.id}')">
+                        <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='https://placehold.co/400x300/f3eef8/9d81b7?text=${encodeURIComponent(p.name)}'">
+                        <button class="quick-view-btn">快速預覽</button>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-tag">${p.tag}</span>
+                        <h3 class="product-title">${p.name}</h3>
+                        <div class="product-jp-title">${p.jpName}</div>
+                        <div class="product-footer">
+                            <span class="product-price">NT$ ${p.price}</span>
+                            <button class="add-cart-btn" onclick="addToCart('${p.id}')">加入購物車</button>
+                        </div>
+                    </div>
+                `;
+                productGrid.appendChild(card);
+            });
+        }
+
+        // 3. STREAMING_CHUNK:Implementing Interactive Functions (Modal, Cart, Filters)...
+        // 開啟/關閉 Modal
+        function openModal(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+            modalImg.src = p.img;
+            modalImg.onerror = function() {
+                this.src = `https://placehold.co/400x300/f3eef8/9d81b7?text=${encodeURIComponent(p.name)}`;
+            };
+            modalTitle.innerText = p.name;
+            modalJp.innerText = p.jpName;
+            modalPrice.innerText = `NT$ ${p.price}`;
+            modalDesc.innerText = p.desc;
+            modalAddCartBtn.onclick = () => {
+                addToCart(p.id);
+                closeModal();
+            };
+            productModal.classList.add('active');
+        }
+
+        function closeModal() {
+            productModal.classList.remove('active');
+        }
+
+        closeModalBtn.onclick = closeModal;
+        productModal.onclick = (e) => {
+            if (e.target === productModal) closeModal();
+        };
+
+        // 購物車側邊欄開關
+        function toggleCartDrawer(open) {
+            if (open) {
+                cartDrawer.classList.add('active');
+                drawerOverlay.classList.add('active');
+            } else {
+                cartDrawer.classList.remove('active');
+                drawerOverlay.classList.remove('active');
+            }
+        }
+
+        openCartBtn.onclick = () => toggleCartDrawer(true);
+        closeCartBtn.onclick = () => toggleCartDrawer(false);
+        drawerOverlay.onclick = () => toggleCartDrawer(false);
+
+        // 加入購物車
+        function addToCart(id) {
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty += 1;
+            } else {
+                const p = products.find(item => item.id === id);
+                cart.push({ ...p, qty: 1 });
+            }
+            updateCartUI();
+            toggleCartDrawer(true);
+        }
+
+        // 調整購物車數量
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
+            }
+            updateCartUI();
+        }
+
+        // 更新購物車 UI
+        function updateCartUI() {
+            // 計算總數與金額
+            const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
+            const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+
+            cartBadge.innerText = totalQty;
+            cartTotalPrice.innerText = `NT$ ${totalPrice}`;
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); margin-top: 40px;">購物車空空如也 🌸</div>`;
+                return;
+            }
+
+            cartItemsContainer.innerHTML = '';
+            cart.forEach(item => {
+                const el = document.createElement('div');
+                el.className = 'cart-item';
+                el.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}" class="cart-item-img" onerror="this.src='https://placehold.co/100x100/f3eef8/9d81b7?text=${encodeURIComponent(item.name)}'">
+                    <div class="cart-item-details">
+                        <div class="cart-item-title">${item.name}</div>
+                        <div class="cart-item-price">NT$ ${item.price}</div>
+                        <div class="cart-item-control">
+                            <div class="qty-picker">
+                                <button class="qty-btn" onclick="changeQty('${item.id}', -1)">-</button>
+                                <span class="qty-num">${item.qty}</span>
+                                <button class="qty-btn" onclick="changeQty('${item.id}', 1)">+</button>
+                            </div>
+                            <button class="remove-item-btn" onclick="changeQty('${item.id}', -${item.qty})">刪除</button>
+                        </div>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(el);
+            });
+        }
+
+        // 分類過濾
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        tabBtns.forEach(btn => {
+            btn.onclick = () => {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const cat = btn.getAttribute('data-category');
+                if (cat === 'all') {
+                    renderProducts(products);
+                } else {
+                    renderProducts(products.filter(p => p.category === cat));
+                }
+            };
+        });
+
+        // 關鍵字搜尋
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase().trim();
+            const filtered = products.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.jpName.toLowerCase().includes(query)
+            );
+            renderProducts(filtered);
+        });
+
+        // 初始渲染
+        window.onload = () => {
+            renderProducts(products);
+            updateCartUI();
+        };
+    </script>
+</body>
+</html>
